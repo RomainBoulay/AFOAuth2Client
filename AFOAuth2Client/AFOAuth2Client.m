@@ -173,8 +173,11 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
     self.requestSerializer = [AFHTTPRequestSerializer serializer];
     
     NSError *error = nil;
-    NSMutableURLRequest *mutableRequest = [self.requestSerializer requestWithMethod:@"POST" URLString:urlString parameters:parameters error:&error];
-
+    NSMutableURLRequest *mutableRequest = [self.requestSerializer requestWithMethod:@"POST"
+                                                                          URLString:[NSURL URLWithString:urlString relativeToURL:self.baseURL]
+                                                                         parameters:parameters
+                                                                              error:&error];
+    
     if (error) {
         NSAssert(!error, @"%@|%s|%d> --ERROR-- %@", [[self class] description], sel_getName(_cmd), __LINE__, [error localizedDescription]);
     }
@@ -244,14 +247,14 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
 
 + (instancetype)credentialWithOAuthToken:(NSString *)token
                                tokenType:(NSString *)type
-								response:(NSDictionary*)response
+                                response:(NSDictionary*)response
 {
     return [[self alloc] initWithOAuthToken:token tokenType:type response:response];
 }
 
 - (id)initWithOAuthToken:(NSString *)token
                tokenType:(NSString *)type
-				response:(NSDictionary*)response
+                response:(NSDictionary*)response
 {
     self = [super init];
     if (!self) {
@@ -261,7 +264,7 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
     self.accessToken = token;
     self.tokenType = type;
     self.authorizationResponse = response;
-
+    
     return self;
 }
 
