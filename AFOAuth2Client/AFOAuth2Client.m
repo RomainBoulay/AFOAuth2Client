@@ -174,7 +174,7 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
     
     NSError *error = nil;
     NSMutableURLRequest *mutableRequest = [self.requestSerializer requestWithMethod:@"POST"
-                                                                          URLString:[NSURL URLWithString:urlString relativeToURL:self.baseURL]
+                                                                          URLString:[[NSURL URLWithString:urlString relativeToURL:self.baseURL] absoluteString]
                                                                          parameters:parameters
                                                                               error:&error];
     
