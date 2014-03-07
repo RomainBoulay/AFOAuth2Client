@@ -234,10 +234,10 @@
 ///----------------------------
 
 /**
- Set the credential refresh token, with a specified expiration.
+ Set the credential refresh token, with a specified expiration. 
  
  @param refreshToken The OAuth refresh token.
- @param expiration The expiration of the access token.
+ @param expiration The expiration of the access token. This must not be `nil`.
  */
 - (void)setRefreshToken:(NSString *)refreshToken
              expiration:(NSDate *)expiration;
@@ -249,7 +249,8 @@
 #ifdef _SECURITY_SECITEM_H_
 /**
  Stores the specified OAuth credential for a given web service identifier in the Keychain.
- 
+ with the default Keychain Accessibilty of kSecAttrAccessibleWhenUnlocked.
+
  @param credential The OAuth credential to be stored.
  @param identifier The service identifier associated with the specified credential.
  
@@ -257,6 +258,19 @@
  */
 + (BOOL)storeCredential:(AFOAuthCredential *)credential
          withIdentifier:(NSString *)identifier;
+
+/**
+ Stores the specified OAuth token for a given web service identifier in the Keychain.
+
+ @param token The OAuth credential to be stored.
+ @param identifier The service identifier associated with the specified token.
+ @param securityAccessibility The Keychain security accessibility to store the credential with.
+
+ @return Whether or not the credential was stored in the keychain.
+ */
++ (BOOL)storeCredential:(AFOAuthCredential *)credential
+         withIdentifier:(NSString *)identifier
+      withAccessibility:(id)securityAccessibility;
 
 /**
  Retrieves the OAuth credential stored with the specified service identifier from the Keychain.
