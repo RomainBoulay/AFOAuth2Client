@@ -10,5 +10,8 @@
       <FileRef
          location = "group:AFOAuth2Client.m">
       </FileRef>
+      <FileRef
+         location = "group:../AFOAuth2Client.podspec">
+      </FileRef>
    </Group>
 </Workspace>

@@ -35,7 +35,7 @@
  @see RFC 6749 The OAuth 2.0 Authorization Framework: http://tools.ietf.org/html/rfc6749
  */
 
-@interface AFOAuth2Client : AFHTTPRequestOperationManager
+@interface AFOAuth2Client : AFHTTPSessionManager
 
 ///------------------------------------------
 /// @name Accessing OAuth 2 Client Properties

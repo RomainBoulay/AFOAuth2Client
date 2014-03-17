@@ -92,10 +92,7 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
 {
     // See http://tools.ietf.org/html/rfc6749#section-7.1
     if ([[type lowercaseString] isEqualToString:@"bearer"]) {
-        AFHTTPRequestSerializer *serializer = [AFHTTPRequestSerializer serializer];
-        [serializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
-        self.requestSerializer = serializer;
-        
+        [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
     }
 }
 
@@ -170,8 +167,6 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
     [mutableParameters setValue:self.secret forKey:@"client_secret"];
     parameters = [NSDictionary dictionaryWithDictionary:mutableParameters];
     
-    self.requestSerializer = [AFHTTPRequestSerializer serializer];
-    
     NSError *error = nil;
     NSMutableURLRequest *mutableRequest = [self.requestSerializer requestWithMethod:@"POST"
                                                                           URLString:[[NSURL URLWithString:urlString relativeToURL:self.baseURL] absoluteString]
@@ -180,10 +175,17 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
     
     if (error) {
         NSAssert(!error, @"%@|%s|%d> --ERROR-- %@", [[self class] description], sel_getName(_cmd), __LINE__, [error localizedDescription]);
+        
+        if (failure)
+            failure(error);
+        return;
     }
     
     [mutableRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    AFHTTPRequestOperation *requestOperation = [self HTTPRequestOperationWithRequest:mutableRequest success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    
+    AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:mutableRequest];
+    requestOperation.responseSerializer = [AFJSONResponseSerializer serializer];
+    [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([responseObject valueForKey:@"error"]) {
             if (failure) {
                 // TODO: Resolve the `error` field into a proper NSError object
@@ -214,11 +216,14 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
         if (success) {
             success(credential);
         }
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (failure) {
             failure(error);
         }
     }];
+    
+    
     [requestOperation start];
 }
 
