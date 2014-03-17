@@ -167,31 +167,14 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
     [mutableParameters setValue:self.secret forKey:@"client_secret"];
     parameters = [NSDictionary dictionaryWithDictionary:mutableParameters];
     
-    NSError *error = nil;
-    NSMutableURLRequest *mutableRequest = [self.requestSerializer requestWithMethod:@"POST"
-                                                                          URLString:[[NSURL URLWithString:urlString relativeToURL:self.baseURL] absoluteString]
-                                                                         parameters:parameters
-                                                                              error:&error];
-    
-    if (error) {
-        NSAssert(!error, @"%@|%s|%d> --ERROR-- %@", [[self class] description], sel_getName(_cmd), __LINE__, [error localizedDescription]);
+    [self POST:urlString parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
         
-        if (failure)
-            failure(error);
-        return;
-    }
-    
-    [mutableRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    
-    AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:mutableRequest];
-    requestOperation.responseSerializer = [AFJSONResponseSerializer serializer];
-    [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        // Success
         if ([responseObject valueForKey:@"error"]) {
-            if (failure) {
-                // TODO: Resolve the `error` field into a proper NSError object
-                // http://tools.ietf.org/html/rfc6749#section-5.2
+            // TODO: Resolve the `error` field into a proper NSError object
+            // http://tools.ietf.org/html/rfc6749#section-5.2
+            if (failure)
                 failure(nil);
-            }
             
             return;
         }
@@ -213,18 +196,15 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
         
         [self setAuthorizationHeaderWithCredential:credential];
         
-        if (success) {
+        if (success)
             success(credential);
-        }
         
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        if (failure) {
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        // Failure
+        if (failure)
             failure(error);
-        }
     }];
-    
-    
-    [requestOperation start];
 }
 
 @end
@@ -321,7 +301,7 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
     
     if( securityAccessibility )
         [updateDictionary setObject:securityAccessibility forKey:(__bridge id)kSecAttrAccessible];
-
+    
     OSStatus status;
     BOOL exists = ([self retrieveCredentialWithIdentifier:identifier] != nil);
     
