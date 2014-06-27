@@ -222,7 +222,7 @@
  */
 + (instancetype)credentialWithOAuthToken:(NSString *)token
                                tokenType:(NSString *)type
-								response:(NSDictionary*)response;
+								response:(NSDictionary *)response;
 
 /**
  Initialize an OAuth credential from a token string, with a specified type.
@@ -232,7 +232,7 @@
  */
 - (id)initWithOAuthToken:(NSString *)token
                tokenType:(NSString *)type
-				response:(NSDictionary*)response;
+				response:(NSDictionary *)response;
 
 ///----------------------------
 /// @name Setting Refresh Token

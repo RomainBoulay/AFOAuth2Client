@@ -232,14 +232,14 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
 
 + (instancetype)credentialWithOAuthToken:(NSString *)token
                                tokenType:(NSString *)type
-                                response:(NSDictionary*)response
+                                response:(NSDictionary *)response
 {
     return [[self alloc] initWithOAuthToken:token tokenType:type response:response];
 }
 
 - (id)initWithOAuthToken:(NSString *)token
                tokenType:(NSString *)type
-                response:(NSDictionary*)response
+                response:(NSDictionary *)response
 {
     self = [super init];
     if (!self) {
