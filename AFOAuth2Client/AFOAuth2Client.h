@@ -112,7 +112,7 @@
                                    password:(NSString *)password
                                       scope:(NSString *)scope
                                     success:(void (^)(AFOAuthCredential *credential))success
-                                    failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
+                                    failure:(void (^)(NSError *error))failure;
 
 /**
  Creates and enqueues an `AFHTTPRequestOperation` to authenticate against the server with a designated scope.
@@ -125,7 +125,7 @@
 - (void)authenticateUsingOAuthWithURLString:(NSString *)urlString
                                       scope:(NSString *)scope
                                     success:(void (^)(AFOAuthCredential *credential))success
-                                    failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
+                                    failure:(void (^)(NSError *error))failure;
 
 /**
  Creates and enqueues an `AFHTTPRequestOperation` to authenticate against the server using the specified refresh token.
@@ -138,7 +138,7 @@
 - (void)authenticateUsingOAuthWithURLString:(NSString *)urlString
                                refreshToken:(NSString *)refreshToken
                                     success:(void (^)(AFOAuthCredential *credential))success
-                                    failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
+                                    failure:(void (^)(NSError *error))failure;
 
 /**
  Creates and enqueues an `AFHTTPRequestOperation` to authenticate against the server with an authorization code, redirecting to a specified URI upon successful authentication.
@@ -153,7 +153,7 @@
                                        code:(NSString *)code
                                 redirectURI:(NSString *)uri
                                     success:(void (^)(AFOAuthCredential *credential))success
-                                    failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
+                                    failure:(void (^)(NSError *error))failure;
 
 /**
  Creates and enqueues an `AFHTTPRequestOperation` to authenticate against the server with the specified parameters.
@@ -166,7 +166,7 @@
 - (void)authenticateUsingOAuthWithURLString:(NSString *)urlString
                                  parameters:(NSDictionary *)parameters
                                     success:(void (^)(AFOAuthCredential *credential))success
-                                    failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
+                                    failure:(void (^)(NSError *error))failure;
 
 @end
 
