@@ -93,6 +93,17 @@
  */
 - (void)setAuthorizationHeaderWithCredential:(AFOAuthCredential *)credential;
 
+
+/**
+ *  Sets the "Authorization" HTTP header set in request objects made by the HTTP client to a basic authentication value with Base64-encoded username and password. This overwrites any existing value for this header.
+ *
+ *  @param credential        The OAuth credential
+ *  @param requestSerializer The request serializer onto the credential is written
+ */
+- (void)setAuthorizationHeaderWithCredential:(AFOAuthCredential *)credential
+                         toRequestSerializer:(AFHTTPRequestSerializer *)requestSerializer;
+
+
 ///---------------------
 /// @name Authenticating
 ///---------------------
