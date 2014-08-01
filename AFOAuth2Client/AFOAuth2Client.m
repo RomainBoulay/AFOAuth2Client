@@ -264,7 +264,6 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
              expiration:(NSDate *)expiration
 {
     NSParameterAssert(expiration);
-    NSParameterAssert(refreshToken);
     self.refreshToken = refreshToken;
     self.expiration = expiration;
 }
