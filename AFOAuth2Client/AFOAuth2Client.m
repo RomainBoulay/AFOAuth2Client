@@ -80,21 +80,28 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
 
 - (void)setAuthorizationHeaderWithToken:(NSString *)token {
     // Use the "Bearer" type as an arbitrary default
-    [self setAuthorizationHeaderWithToken:token ofType:@"Bearer"];
+    [self setAuthorizationHeaderWithToken:token ofType:@"Bearer" toRequestSerializer:self.requestSerializer];
 }
 
 - (void)setAuthorizationHeaderWithCredential:(AFOAuthCredential *)credential {
-    [self setAuthorizationHeaderWithToken:credential.accessToken ofType:credential.tokenType];
+    [self setAuthorizationHeaderWithToken:credential.accessToken ofType:credential.tokenType toRequestSerializer:self.requestSerializer];
+}
+
+- (void)setAuthorizationHeaderWithCredential:(AFOAuthCredential *)credential toRequestSerializer:(AFHTTPRequestSerializer *)requestSerializer {
+    [self setAuthorizationHeaderWithToken:credential.accessToken ofType:credential.tokenType toRequestSerializer:requestSerializer];
 }
 
 - (void)setAuthorizationHeaderWithToken:(NSString *)token
                                  ofType:(NSString *)type
-{
+                    toRequestSerializer:(AFHTTPRequestSerializer *)requestSerializer {
+    NSParameterAssert(requestSerializer);
+    
     // See http://tools.ietf.org/html/rfc6749#section-7.1
     if ([[type lowercaseString] isEqualToString:@"bearer"]) {
-        [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
+        [requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
     }
 }
+
 
 #pragma mark -
 
@@ -194,7 +201,7 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
         
         [credential setRefreshToken:refreshToken expiration:expireDate];
         
-        [self setAuthorizationHeaderWithCredential:credential];
+//        [self setAuthorizationHeaderWithCredential:credential];
         
         if (success)
             success(credential);
@@ -266,6 +273,7 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
 }
 
 - (BOOL)isExpired {
+    NSParameterAssert(self.expiration);
     return [self.expiration compare:[NSDate date]] == NSOrderedAscending;
 }
 
