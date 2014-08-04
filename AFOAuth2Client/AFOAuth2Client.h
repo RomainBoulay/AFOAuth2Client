@@ -188,7 +188,7 @@
  
  OAuth credentials can be stored in the user's keychain, and retrieved on subsequent launches.
  */
-@interface AFOAuthCredential : NSObject <NSCoding>
+@interface AFOAuthCredential : NSObject <NSCoding, NSCopying>
 
 ///--------------------------------------
 /// @name Accessing Credential Properties

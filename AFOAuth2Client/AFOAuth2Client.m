@@ -375,4 +375,21 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
     [encoder encodeObject:self.expiration forKey:@"expiration"];
 }
 
+
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone {
+    AFOAuthCredential *copy = [[[self class] alloc] init];
+    
+    if (copy) {
+        // Copy NSObject subclasses
+        copy.accessToken = [self.accessToken copyWithZone:zone];
+        copy.tokenType = [self.tokenType copyWithZone:zone];
+        copy.refreshToken = [self.refreshToken copyWithZone:zone];
+        copy.expiration = [self.expiration copyWithZone:zone];
+    }
+    
+    return copy;
+}
+
 @end
