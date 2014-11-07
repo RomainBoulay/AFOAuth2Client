@@ -191,7 +191,9 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
             refreshToken = [parameters valueForKey:@"refresh_token"];
         }
         
-        AFOAuthCredential *credential = [AFOAuthCredential credentialWithOAuthToken:[responseObject valueForKey:@"access_token"] tokenType:[responseObject valueForKey:@"token_type"] response:responseObject];
+        AFOAuthCredential *credential = [AFOAuthCredential credentialWithOAuthToken:[responseObject valueForKey:@"access_token"]
+                                                                          tokenType:[responseObject valueForKey:@"token_type"]
+                                                                           response:responseObject];
         NSDate *expireDate = [NSDate distantFuture];
         
         id expiresIn = [responseObject valueForKey:@"expires_in"];
@@ -199,10 +201,7 @@ static NSMutableDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *i
             expireDate = [NSDate dateWithTimeIntervalSinceNow:[expiresIn doubleValue]];
         }
         
-//        expireDate = [NSDate dateWithTimeIntervalSinceNow:5];
         [credential setRefreshToken:refreshToken expiration:expireDate];
-        
-//        [self setAuthorizationHeaderWithCredential:credential];
         
         if (success)
             success(credential);
